@@ -18,63 +18,21 @@ package com.google.samples.propertyanimation
 
 import android.animation.*
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
-import android.widget.Button
 import android.widget.FrameLayout
-import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    lateinit var star: ImageView
-    lateinit var rotateButton: Button
-    lateinit var translateButton: Button
-    lateinit var scaleButton: Button
-    lateinit var fadeButton: Button
-    lateinit var colorizeButton: Button
-    lateinit var showerButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        star = findViewById(R.id.star)
-        rotateButton = findViewById<Button>(R.id.rotateButton)
-        translateButton = findViewById<Button>(R.id.translateButton)
-        scaleButton = findViewById<Button>(R.id.scaleButton)
-        fadeButton = findViewById<Button>(R.id.fadeButton)
-        colorizeButton = findViewById<Button>(R.id.colorizeButton)
-        showerButton = findViewById<Button>(R.id.showerButton)
-
-        rotateButton.setOnClickListener {
-            rotater()
-        }
-
-        translateButton.setOnClickListener {
-            translater()
-        }
-
-        scaleButton.setOnClickListener {
-            scaler()
-        }
-
-        fadeButton.setOnClickListener {
-            fader()
-        }
-
-        colorizeButton.setOnClickListener {
-            colorizer()
-        }
-
-        showerButton.setOnClickListener {
-            shower()
-        }
     }
 
     private fun ObjectAnimator.disableViewDuringAnimation(view: View) {
@@ -89,14 +47,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun rotater() {
+    fun rotater(view: View) {
         val animator = ObjectAnimator.ofFloat(star, View.ROTATION, -360f, 0f)
         animator.duration = 2000
         animator.disableViewDuringAnimation(rotateButton)
         animator.start()
     }
 
-    private fun translater() {
+    fun translater(view: View) {
         val animator = ObjectAnimator.ofFloat(star, View.TRANSLATION_X, 200f)
         animator.repeatCount = 1
         animator.repeatMode = ObjectAnimator.REVERSE
@@ -104,7 +62,7 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun scaler() {
+    fun scaler(view: View) {
         val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 4f)
         val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 4f)
         val animator = ObjectAnimator.ofPropertyValuesHolder(star, scaleX, scaleY)
@@ -114,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun fader() {
+    fun fader(view: View) {
         val animator = ObjectAnimator.ofFloat(star, View.ALPHA, 0f)
         animator.repeatCount = 1
         animator.repeatMode = ObjectAnimator.REVERSE
@@ -122,9 +80,11 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun colorizer() {
-        val animator = ObjectAnimator.ofArgb(star.parent, "backgroundColor",
-            Color.BLACK, Color.BLUE)
+    fun colorizer(view: View) {
+        val animator = ObjectAnimator.ofArgb(
+            star.parent, "backgroundColor",
+            Color.BLACK, Color.BLUE
+        )
         animator.duration = 1000
         animator.repeatCount = 1
         animator.repeatMode = ObjectAnimator.REVERSE
@@ -132,7 +92,7 @@ class MainActivity : AppCompatActivity() {
         animator.start()
     }
 
-    private fun shower() {
+    fun shower(view: View) {
         val container = star.parent as ViewGroup
         val containerW = container.width
         val containerH = container.height
@@ -158,11 +118,15 @@ class MainActivity : AppCompatActivity() {
         newStar.translationX = Math.random().toFloat() * containerW - starW / 2
 
         // star animation
-        val mover = ObjectAnimator.ofFloat(newStar, View.TRANSLATION_Y,
-            -starH, containerH + starH)
+        val mover = ObjectAnimator.ofFloat(
+            newStar, View.TRANSLATION_Y,
+            -starH, containerH + starH
+        )
         mover.interpolator = AccelerateInterpolator(1f)
-        val rotator = ObjectAnimator.ofFloat(newStar, View.ROTATION,
-            (Math.random() * 1080).toFloat())
+        val rotator = ObjectAnimator.ofFloat(
+            newStar, View.ROTATION,
+            (Math.random() * 1080).toFloat()
+        )
         rotator.interpolator = LinearInterpolator()
         val set = AnimatorSet()
         set.playTogether(mover, rotator)
